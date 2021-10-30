@@ -1,57 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Suspense, useEffect } from 'react';
 import { Counter } from './features/counter/Counter';
 import './App.css';
+import {
+  Switch,
+  Route,
+  useLocation,
+  useHistory
+} from "react-router-dom";
+import {
+  TransitionGroup,
+  CSSTransition
+} from "react-transition-group";
+import { Evouchers } from './features/evouchers/Evouchers';
+import { Evoucher } from './features/evouchers/Evoucher'
+import { Works } from './features/works/Works';
+import { Contactus } from './features/works/Contactus';
+import { Banner } from './features/works/Banner';
 
 function App() {
+  const location = useLocation();
+  const history = useHistory();
+  useEffect(() => console.log("RE PAR"), [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <TransitionGroup>
+      <CSSTransition key={location.key} classNames="fade" timeout={500}>
+        <div className="">
+          <Suspense fallback={<div className="h-full w-full flex flex-wrap items-center content-center justify-center">
+            <span className="flex h-4 w-4 justify-center items-center">
+              <span className="animate-ping absolute inline-flex h-6 w-6 rounded-full bg-green-500 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-4 w-4 bg-green-500"></span>
+            </span>
+          </div>}>
+            <Switch location={location}>
+              <Route exact path="/"><Evouchers /></Route>
+              <Route path="/evoucher"><Evoucher /></Route>
+              <Route path="/counter"> <Counter /></Route>
+              <Route path="/works"><>
+                <Banner />
+                <Works />
+                <Contactus />
+              </></Route>
+            </Switch>
+          </Suspense>
+        </div >
+      </CSSTransition>
+    </TransitionGroup >
   );
 }
 
